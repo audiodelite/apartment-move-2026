@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Apartment Move 2026</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    margin: 0;
+    padding: 32px;
+    background: #fafaf9;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 24px; }
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle { color: #6b6b6b; font-size: 14px; }
+  .countdown {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 28px;
+  }
+  .tab {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b6b6b;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: -1px;
+    font-family: inherit;
+  }
+  .tab:hover { color: #1a1a1a; }
+  .tab.active {
+    color: #1a1a1a;
+    border-bottom-color: #1a1a1a;
+  }
+  .tab-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    background: #f0f0f0;
+    color: #4b4b4b;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tab.active .tab-badge { background: #1a1a1a; color: white; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  section { margin-bottom: 36px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 8px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: #4b4b4b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .stat {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b6b6b;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .stat-sub {
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  th {
+    background: #f5f5f4;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #4b4b4b;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; }
+  td.good { color: #059669; font-weight: 500; }
+  td.bad { color: #dc2626; }
+  tr.standout { background: #fef9c3; }
+  tr.standout:hover { background: #fef08a; }
+
+  .pick {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .pick-rank {
+    display: inline-block;
+    width: 22px; height: 22px;
+    background: #1a1a1a;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  .pick-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .pick-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f0f0f0;
+    color: #4b4b4b;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .pick-tag.gold { background: #fef3c7; color: #92400e; }
+  .pick-body { font-size: 13px; color: #1a1a1a; margin-bottom: 12px; }
+  .pick-cta {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #1a1a1a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 8px;
+  }
+  .pick-cta.secondary {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #d4d4d4;
+  }
+
+  .listing {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .listing.standout {
+    border: 1px solid #f59e0b;
+    background: linear-gradient(to right, #fffbeb 0%, white 40%);
+  }
+  .listing-addr {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .listing-addr a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .listing-addr a:hover { border-bottom-color: #1a1a1a; }
+  td a {
+    color: #1a1a1a;
+    text-decoration: none;
+    border-bottom: 1px solid #d4d4d4;
+    transition: border-color 0.15s;
+  }
+  td a:hover { border-bottom-color: #1a1a1a; }
+  .ext-icon {
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-left: 3px;
+    opacity: 0.5;
+    vertical-align: middle;
+  }
+  .listing-meta {
+    font-size: 12px;
+    color: #6b6b6b;
+  }
+  .listing-meta strong { color: #1a1a1a; font-weight: 500; }
+  .listing-tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .listing-tag.standout { background: #f59e0b; color: white; }
+  .listing-tag.fresh { background: #059669; color: white; }
+  .listing-tag.no-fee { background: #ddd6fe; color: #5b21b6; }
+  .listing-price {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .listing-rent {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .listing-psqft {
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 2px;
+  }
+  .listing-psqft.good { color: #059669; font-weight: 500; }
+
+  .timeline {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .tl-row:last-child { border-bottom: none; }
+  .tl-date { font-weight: 600; color: #4b4b4b; }
+
+  .alert {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .alert-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+  }
+  .alert-warn {
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    color: #92400e;
+  }
+
+  .saved-searches {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .saved-searches a {
+    display: block;
+    padding: 8px 12px;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  .saved-searches a:hover { background: #f5f5f4; }
+  .saved-searches a::before { content: "→ "; color: #6b6b6b; }
+
+  .footnote {
+    font-size: 11px;
+    color: #6b6b6b;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Apartment Move 2026</h1>
+  <div class="subtitle">100 W 31st → ? · lease ends Aug 18, 2026</div>
+  <div class="countdown" id="countdown">Loading…</div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="listings">Listings <span class="tab-badge">22</span></button>
+  <button class="tab" data-tab="neighborhoods">Neighborhoods</button>
+  <button class="tab" data-tab="timeline">Timeline & Costs</button>
+</div>
+
+<!-- ============ OVERVIEW TAB ============ -->
+<div class="tab-panel active" id="tab-overview">
+
+<section>
+  <h2>The Numbers</h2>
+  <div class="grid-4">
+    <div class="stat">
+      <div class="stat-label">Take-home / mo</div>
+      <div class="stat-value">$22.5k</div>
+      <div class="stat-sub">midpoint of $20-25k</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Comfortable rent (30%)</div>
+      <div class="stat-value">$6,750</div>
+      <div class="stat-sub">recommended ceiling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Stretch (35%)</div>
+      <div class="stat-value">$7,875</div>
+      <div class="stat-sub">if the place is great</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Current rent</div>
+      <div class="stat-value">$5,400</div>
+      <div class="stat-sub">24% — well under</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Top 3 Picks (by neighborhood)</h2>
+
+  <div class="pick">
+    <div class="pick-name">
+      <span class="pick-rank">1</span>Battery Park City
+      <span class="pick-tag">SLEEPER PICK</span>
+    </div>
+    <div class="pick-body">
+      $/sqft drops to ~$6.55. Arah practically walks to 40 Wall. Andrew gets 1 train at Rector → 28th St (~16 min, single seat). Newer building stock with full amenities, water, esplanade.
+      <strong>Trade-off:</strong> West Side Highway feels like a barrier; quieter weekends.
+    </div>
+    <a class="pick-cta" href="https://www.renthop.com/search?bathrooms=0&q=&areas=battery-park-city-new-york-ny&min_price=0&max_price=8000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop 2BR</a>
+    <a class="pick-cta secondary" href="https://www.zillow.com/battery-park-city-new-york-ny/2-_beds/" target="_blank">Zillow</a>
+  </div>
+
+  <div class="pick">
+    <div class="pick-name">
+      <span class="pick-rank">2</span>Jersey City — Newport / Exchange Place / Paulus Hook
+      <span class="pick-tag">VALUE PLAY</span>
+    </div>
+    <div class="pick-body">
+      Both commutes <em>improve</em>. Andrew: PATH Newport → 33rd in 8 min, into the office. Arah: PATH → WTC, 7-min walk to 40 Wall. Rents 30-40% cheaper for same sqft. NYC city tax savings ≈ $1k-1.2k/mo.
+      <strong>Trade-off:</strong> Leaving Manhattan. Worth a real conversation with Arah before committing.
+    </div>
+    <a class="pick-cta" href="https://www.zillow.com/jersey-city-nj/rentals/2-_beds/" target="_blank">Zillow JC</a>
+    <a class="pick-cta secondary" href="https://www.apartments.com/jersey-city-nj/2-bedrooms/" target="_blank">Apartments.com</a>
+  </div>
+
+  <div class="pick">
+    <div class="pick-name">
+      <span class="pick-rank">3</span>Tribeca / FiDi border
+      <span class="pick-tag gold">★ HOT INVENTORY</span>
+    </div>
+    <div class="pick-body">
+      The FiDi side gets you Tribeca-adjacent at FiDi prices. Andrew: 1/2/3 from Chambers up to 28th in ~12-15 min. Arah: 8-12 min walk. <strong>Two standout listings posted today on Listings tab</strong> — both $5,650 with no broker fee.
+    </div>
+    <a class="pick-cta" href="#" onclick="switchTab('listings'); return false;">View Listings →</a>
+    <a class="pick-cta secondary" href="https://www.renthop.com/search?bathrooms=0&q=&areas=financial-district-new-york-ny&min_price=0&max_price=8000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop FiDi</a>
+  </div>
+</section>
+
+</div>
+
+<!-- ============ LISTINGS TAB ============ -->
+<div class="tab-panel" id="tab-listings">
+
+<div class="alert alert-info">
+  <strong>22 active listings</strong> from RentHop scan on May 3, 2026. Auto-refreshes Mon + Thu mornings.
+</div>
+
+<section>
+  <h2>★ Standouts (best $/sqft, posted today)</h2>
+
+  <div class="listing standout">
+    <div>
+      <div class="listing-addr">
+        <a href="https://www.renthop.com/listings/33-gold-street/l7/76361297" target="_blank">33 Gold Street, Apt L7 ↗</a>
+        <span class="listing-tag standout">$/sqft winner</span>
+        <span class="listing-tag fresh">30 min ago</span>
+        <span class="listing-tag no-fee">No fee</span>
+      </div>
+      <div class="listing-meta">
+        <strong>Financial District</strong> · 2BR / Flex 3 · 2BA · 1,250 sqft · Exclusive
+      </div>
+    </div>
+    <div class="listing-price">
+      <div class="listing-rent">$5,650</div>
+      <div class="listing-psqft good">$4.52 / sqft</div>
+    </div>
+  </div>
+
+  <div class="listing standout">
+    <div>
+      <div class="listing-addr">
+        <a href="https://www.renthop.com/listings/106-fulton-street/8a/76361364" target="_blank">106 Fulton Street, Apt 8A ↗</a>
+        <span class="listing-tag standout">hits floor</span>
+        <span class="listing-tag fresh">30 min ago</span>
+        <span class="listing-tag no-fee">No fee</span>
+      </div>
+      <div class="listing-meta">
+        <strong>Financial District</strong> · 2BR / Flex 3 · 1BA · 900 sqft · Exclusive
+      </div>
+    </div>
+    <div class="listing-price">
+      <div class="listing-rent">$5,650</div>
+      <div class="listing-psqft good">$6.28 / sqft</div>
+    </div>
+  </div>
+
+  <div class="listing standout">
+    <div>
+      <div class="listing-addr">
+        <a href="https://www.renthop.com/listings/battery-place/909/75137043" target="_blank">Battery Place, Apt 909 ↗</a>
+        <span class="listing-tag fresh">4h ago</span>
+        <span class="listing-tag no-fee">No fee</span>
+      </div>
+      <div class="listing-meta">
+        <strong>Battery Park City</strong> · 2BR · 2BA · 1,150 sqft
+      </div>
+    </div>
+    <div class="listing-price">
+      <div class="listing-rent">$7,300</div>
+      <div class="listing-psqft good">$6.35 / sqft</div>
+    </div>
+  </div>
+
+  <div class="listing">
+    <div>
+      <div class="listing-addr">
+        <a href="https://www.renthop.com/listings/10-hanover-square/15a/76284520" target="_blank">10 Hanover Square, Apt 15A ↗</a>
+        <span class="listing-tag fresh">2h ago</span>
+        <span class="listing-tag no-fee">No fee</span>
+      </div>
+      <div class="listing-meta">
+        <strong>Financial District</strong> · 2BR · 2BA · 1,161 sqft · By owner
+      </div>
+    </div>
+    <div class="listing-price">
+      <div class="listing-rent">$7,874</div>
+      <div class="listing-psqft">$6.78 / sqft</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Battery Park City</h2>
+  <table>
+    <thead>
+      <tr><th>Building</th><th>Layout</th><th class="num">Rent</th><th class="num">Sqft</th><th class="num">$/sqft</th><th>Posted</th></tr>
+    </thead>
+    <tbody>
+      <tr class="standout"><td><a href="https://www.renthop.com/listings/battery-place/909/75137043" target="_blank">Battery Place #909</a></td><td>2BR/2BA</td><td class="num">$7,300</td><td class="num">1,150</td><td class="num good">$6.35</td><td>4h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/south-end-avenue/11/75720197" target="_blank">South End Ave #11</a></td><td>2BR/Flex 3</td><td class="num">$6,775</td><td class="num">—</td><td class="num">—</td><td>1d ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/3rd-place/9p/74183915" target="_blank">3rd Place #9P</a></td><td>2BR/Flex 3</td><td class="num">$6,890</td><td class="num">—</td><td class="num">—</td><td>2d ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/225s/76369386" target="_blank">Battery Place #225S</a></td><td>2BR/2BA</td><td class="num">$7,500</td><td class="num">—</td><td class="num">—</td><td>4h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/225s/76183666" target="_blank">Battery Place #225S</a></td><td>2BR/2BA</td><td class="num">$7,500</td><td class="num">—</td><td class="num">—</td><td>5h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/225s/76146810" target="_blank">Battery Place #225S</a></td><td>2BR/2BA</td><td class="num">$7,500</td><td class="num">—</td><td class="num">—</td><td>7h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/225s/76031499" target="_blank">Battery Place #225S</a></td><td>2BR/2BA</td><td class="num">$7,500</td><td class="num">—</td><td class="num">—</td><td>1d ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/323/76369385" target="_blank">Battery Place #323</a></td><td>2BR/2BA</td><td class="num">$7,600</td><td class="num">—</td><td class="num">—</td><td>4h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/323/76369365" target="_blank">Battery Place #323</a></td><td>2BR/2BA</td><td class="num">$7,600</td><td class="num">—</td><td class="num">—</td><td>6h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/43/76338576" target="_blank">Battery Place #43</a></td><td>2BR/Flex 3</td><td class="num">$7,700</td><td class="num">—</td><td class="num">—</td><td>23h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/battery-place/525/76412680" target="_blank">Battery Place #525</a></td><td>2BR/1BA</td><td class="num">$7,700</td><td class="num">—</td><td class="num">—</td><td>7h ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/rector-place/60/75720505" target="_blank">Rector Place #60</a></td><td>2BR/Flex 3</td><td class="num">$7,825</td><td class="num">—</td><td class="num">—</td><td>1d ago</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Financial District</h2>
+  <table>
+    <thead>
+      <tr><th>Address</th><th>Layout</th><th class="num">Rent</th><th class="num">Sqft</th><th class="num">$/sqft</th><th>Posted</th></tr>
+    </thead>
+    <tbody>
+      <tr class="standout"><td><a href="https://www.renthop.com/listings/33-gold-street/l7/76361297" target="_blank">33 Gold St #L7</a></td><td>2BR/Flex 3, 2BA</td><td class="num">$5,650</td><td class="num">1,250</td><td class="num good">$4.52</td><td>30m ago</td></tr>
+      <tr class="standout"><td><a href="https://www.renthop.com/listings/106-fulton-street/8a/76361364" target="_blank">106 Fulton St #8A</a></td><td>2BR/Flex 3, 1BA</td><td class="num">$5,650</td><td class="num">900</td><td class="num good">$6.28</td><td>30m ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/park-row/75632798" target="_blank">Park Row</a></td><td>2BR/Flex 3, 2BA</td><td class="num">$5,820-6,270</td><td class="num">—</td><td class="num">—</td><td>30m ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/exchange-place/74936263" target="_blank">Exchange Place</a></td><td>2BR/Flex 3, 1BA</td><td class="num">$6,305-6,793</td><td class="num">—</td><td class="num">—</td><td>30m ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/17-battery-place/76427867" target="_blank">17 Battery Place</a></td><td>2BR/2BA</td><td class="num">$7,469-8,047</td><td class="num">—</td><td class="num">—</td><td>30m ago</td></tr>
+      <tr><td><a href="https://www.renthop.com/listings/10-hanover-square/15a/76284520" target="_blank">10 Hanover Sq #15A</a></td><td>2BR/2BA</td><td class="num">$7,874</td><td class="num">1,161</td><td class="num">$6.78</td><td>2h ago</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Jersey City</h2>
+  <div class="alert alert-warn">
+    RentHop's <code>jersey-city-nj</code> filter returned mostly Brooklyn results — broken on their end. The scheduled scan will use Zillow + Apartments.com for JC starting tomorrow morning.
+  </div>
+</section>
+
+<section>
+  <h2>Saved-Search URLs</h2>
+  <div class="saved-searches">
+    <a href="https://www.renthop.com/search?bathrooms=0&q=&areas=battery-park-city-new-york-ny&min_price=0&max_price=8000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop — BPC 2BR ≤ $8k</a>
+    <a href="https://www.renthop.com/search?bathrooms=0&q=&areas=financial-district-new-york-ny&min_price=0&max_price=8000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop — FiDi 2BR ≤ $8k</a>
+    <a href="https://www.renthop.com/search?bathrooms=0&q=&areas=tribeca-new-york-ny&min_price=0&max_price=8000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop — Tribeca 2BR ≤ $8k</a>
+    <a href="https://www.renthop.com/search?bathrooms=0&q=&areas=brooklyn-heights-new-york-ny&min_price=0&max_price=7000&bedrooms%5B%5D=2&sort=hopscore" target="_blank">RentHop — Brooklyn Heights 2BR ≤ $7k</a>
+    <a href="https://www.zillow.com/jersey-city-nj/rentals/2-_beds/" target="_blank">Zillow — Jersey City 2BR</a>
+    <a href="https://www.zillow.com/hoboken-nj/rentals/2-_beds/" target="_blank">Zillow — Hoboken 2BR</a>
+  </div>
+</section>
+
+</div>
+
+<!-- ============ NEIGHBORHOODS TAB ============ -->
+<div class="tab-panel" id="tab-neighborhoods">
+
+<section>
+  <h2>Full Scorecard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Neighborhood</th>
+        <th>Andrew → Farley</th>
+        <th>Arah → 40 Wall</th>
+        <th class="num">2BR median</th>
+        <th class="num">$/sqft</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>NoMad / Chelsea (now)</td><td>5-10 min walk</td><td>18-22 min</td><td class="num">$7,800</td><td class="num">$8.50</td></tr>
+      <tr><td>Hudson Yards / W Chelsea</td><td>10-15 min walk</td><td>22-25 min</td><td class="num">$8,200</td><td class="num">$9.20</td></tr>
+      <tr><td>Tribeca</td><td>15 min</td><td class="good">8-12 min walk</td><td class="num">$7,995</td><td class="num">$8.40</td></tr>
+      <tr class="standout"><td><strong>Battery Park City</strong></td><td>20 min</td><td class="good">10-12 min walk</td><td class="num">$6,750</td><td class="num good">$6.55</td></tr>
+      <tr class="standout"><td>FiDi</td><td>20 min</td><td class="good">5 min walk</td><td class="num">$6,200</td><td class="num good">$6.30</td></tr>
+      <tr><td>Brooklyn Heights</td><td>22-25 min</td><td>12 min</td><td class="num">$6,231</td><td class="num">$5.80</td></tr>
+      <tr><td>DUMBO</td><td class="bad">25 min + transfer</td><td>15 min</td><td class="num">$7,400</td><td class="num">$7.10</td></tr>
+      <tr class="standout"><td><strong>Jersey City Newport</strong></td><td class="good">8 min PATH</td><td class="good">10-12 min</td><td class="num good">$4,605</td><td class="num good">$4.40</td></tr>
+      <tr><td>Hoboken</td><td>14 min PATH</td><td>18-20 min</td><td class="num">$4,689</td><td class="num">$4.45</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<!-- ============ TIMELINE & COSTS TAB ============ -->
+<div class="tab-panel" id="tab-timeline">
+
+<section>
+  <h2>Move Timeline</h2>
+  <div class="timeline">
+    <div class="tl-row"><div class="tl-date">Now → Jun 14</div><div>Quiet research. Walk through top 3 neighborhoods on weekends. No touring yet — listings turn over too fast.</div></div>
+    <div class="tl-row"><div class="tl-date">Jun 15-30</div><div>Set up StreetEasy + Zillow saved searches with daily emails. Casual touring of 2-3 buildings to calibrate the market.</div></div>
+    <div class="tl-row"><div class="tl-date">Jul 1-15</div><div>Serious touring window. Shortlist to top 5. Run financial model on each.</div></div>
+    <div class="tl-row"><div class="tl-date">Jul 15-31</div><div>Apply, negotiate, sign. Aim to lock the apartment by Aug 1.</div></div>
+    <div class="tl-row"><div class="tl-date">Aug 1-14</div><div>Book movers. Pack. Notify current landlord. Schedule utilities.</div></div>
+    <div class="tl-row"><div class="tl-date">Aug 15-18</div><div>Move out of 100 W 31st.</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Move-In Costs</h2>
+  <table>
+    <thead><tr><th>Cost</th><th class="num">Amount (at $6,750)</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>First month rent</td><td class="num">$6,750</td><td></td></tr>
+      <tr><td>Security deposit</td><td class="num">$6,750</td><td>Capped at 1 mo by NY law</td></tr>
+      <tr><td>Broker fee</td><td class="num good">$0</td><td>FARE Act (Jun 2025) — landlord pays</td></tr>
+      <tr><td>Movers</td><td class="num">$1,200</td><td>Intra-NYC, 2 movers, 5 hrs</td></tr>
+      <tr><td>Doorman move-in fee</td><td class="num">$300</td><td>If applicable</td></tr>
+      <tr><td><strong>Total upfront</strong></td><td class="num"><strong>~$15,000</strong></td><td></td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<div class="footnote">
+  Sources: RentCafe Manhattan + JC + Hoboken 2026 reports · MNS Manhattan Rental Market · NYC FARE Act (DCWP) · MTA + PATH schedules · NY State Dept. of Tax + Finance · RentHop live listings (May 3, 2026).<br>
+  Vault: <code>01-Projects/Apartment-Move-2026/</code> — PROJECT, Framework, Neighborhoods, Listings.
+</div>
+
+</div>
+
+<script>
+  const moveDate = new Date('2026-08-18T00:00:00');
+  const today = new Date();
+  const days = Math.ceil((moveDate - today) / (1000 * 60 * 60 * 24));
+  document.getElementById('countdown').textContent = days + ' days until lease ends';
+
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.tab[data-tab="' + name + '"]').classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => switchTab(t.dataset.tab));
+  });
+</script>
+
+</body>
+</html>
